@@ -9,8 +9,6 @@ files <- list.files('_data/_gdb', full.names = T, pattern = '.gdb')
 list  <- lapply(files, FUN = ogrListLayers)
 
 poly  <- list()
-poly_cnts <- list()
-cnts_p <- list() 
 
 for(i in 1:length(files)){
   
