@@ -1,0 +1,24 @@
+
+
+library(raster)
+library(rgdal)
+library(tidyverse)
+library(gtools)
+library(rgeos)
+
+files <- list.files('_prec_col', full.names = TRUE, pattern = '.asc$') %>%
+            mixedsort()
+
+layers <- lapply(files, FUN = raster) %>%
+            stack()
+
+valle <- shapefile('_mask/valle_cauca.shp')
+
+plot(layers[[1]])
+plot(valle, add = TRUE)
+
+layers_valle <- raster::crop(layers, valle) %>% 
+                  raster::mask(valle)
+layers_valle <- unstack(layers_valle)  
+namesRaster <- paste0('prec_', 1:12)
+Map('writeRaster', x = layers_valle, filename = paste0('_prec_valle/', namesRaster, '.asc'))
